@@ -1,0 +1,91 @@
+\documentclass{report}
+
+\usepackage[vmargin=0.5in, hmargin=0.8in]{geometry}
+
+%space between lines
+\usepackage{setspace}
+\setstretch{1.15}
+
+\usepackage{minted} % for SQL code
+\usepackage{parskip} % skip paragraph identation
+
+\begin{document}
+
+\chapter{Introduction to Relational Databases in SQL}
+\section{Uniquely identify records with key constraints}
+\subsection{Keys and superkeys}
+
+What is a key?
+\begin{itemize}
+    \item Attributes(s) that identify a record Uniquely.
+    \item As long as attributes can be removed: \textbf{superkeys}.
+    \item If no more attributes can be removed: minimal superkey or \textbf{key}.
+\end{itemize}
+
+\vspace{0.5em}
+\begin{center}
+\begin{tabular}{lllll}
+\textbf{license\_no} & \textbf{serial\_no} & \textbf{make} & \textbf{model} & \textbf{year} \\
+Texas ABC-739       & A69352              & Ford          & Mustang        & 2             \\
+Florida TVP-347     & B43696              & Oldsmobile    & Cutlass        & 5             \\
+New York MP0-22     & X83554              & Oldsmobile    & Delta          & 1             \\
+California 432-TFY  & C43742              & Mercedes      & 190-D          & 99            \\
+California RSK-629  & Y82935              & Toyota        & Camry          & 4             \\
+Texas RSK-629       & U028365             & Jaguar        & XJS            & 4             \\
+\end{tabular}
+\end{center}
+
+\emph{Note: Table adapted from Elmasri, Navathe (2011): Fundamentals of Database Systems, 6th Ed., Pearson}
+
+SK1 = \{license\_no, serial\_no, make, model, year\} \\
+SK2 = \{license\_no, serial\_no, make, model\} \\
+SK3 = \{make, model, year\}, 
+SK4 = \{license\_no, serial\_no\}, 
+SKi, ..., SKn
+
+A lot of possible superkeys with different combinations. But only four possible \textbf{keys}
+
+K1 = \{license\_no\}; 
+K2 = \{serial\_no\}; 
+K3 = \{model\}; 
+K4 = \{make, year\}
+
+Here K1 to 3 only consist of one attribute. Removing either "make" or "year" from K4 would result in duplicates. Only one candidate key can be the chosen key.
+
+A simple way of finding out whether a certain column(or combination) contains only unique values, wrap everything within the COUNT() function.
+
+\inputminted[
+    firstline=1,
+    lastline=7,
+    highlightlines={4-5},
+]{SQL}{keys_and_superkeys.sql}
+
+\section{Primary keys}
+\begin{itemize}
+    \item One primary key per database table, chosen from candidate keys
+    \item Uniquely identifies records, e.g. for referencing in other tables
+    \item Unique and not-null constraint both apply
+    \item Primary keys are time-invariant: choose columns wisely
+\end{itemize}
+
+\subsection{Specifying primary keys}
+
+\inputminted[
+    firstline=10,
+    lastline=28,
+    highlightlines={11,17,27}
+]{SQL}{keys_and_superkeys.sql}
+
+\emph{Note: Taken from PostgreSQL documentation.}
+
+\subsection{Adding primary key to existing table}
+
+\inputminted[
+    firstline=30,
+    lastline=31
+]{SQL}{keys_and_superkeys.sql}
+
+\section{Surrogate keys}
+
+
+\end{document}
