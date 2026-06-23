@@ -1,3 +1,1 @@
-My Study Notes for diving deeper into the world of SQL.
-
-[SQLNotes.pdf](main.pdf)
+My [Study Notes](main.pdf) for diving deeper into the world of SQL.
