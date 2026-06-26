@@ -30,3 +30,29 @@ WHERE
     dim_author_sf.author = 'Octavia E. Butler'
     AND
     dim_year_sf.year = 2018 AND dim_quarter_sf.quarter = 4;
+
+CREATE VIEW view_name AS 
+SELECT col1, col2
+FROM table_name
+WHERE condition;
+
+CREATE VIEW scifi_books AS
+SELECT title, author, genre
+FROM dim_book_sf
+JOIN dim_genre_sf ON dim_genre_sf.genre_id = dim_book_sf.genre_id
+JOIN dim_author_sf ON dim_author_sf.author_id = dim_book_sf.author_id
+WHERE dim_genre_sf.genre = 'science fiction';
+
+SELECT * FROM scifi_books;
+
+SELECT * FROM
+(SELECT title, author, genre
+FROM dim_book_sf
+JOIN dim_genre_sf ON dim_genre_sf.genre_id = dim_book_sf.genre_id
+JOIN dim_author_sf ON dim_author_sf.author_id = dim_book_sf.author_id
+WHERE dim_genre_sf.genre = 'science fiction');
+
+SELECT * FROM INFORMATION_SCHEMA.views;
+
+SELECT * FROM information_schema.views
+WHERE table_schema NOT IN ('pg_catalog', 'information_schema');
