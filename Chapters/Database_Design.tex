@@ -643,6 +643,17 @@ Excludes system views
     \item \textbf{Joins:} INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN
     \item \textbf{Conditionals:} WHERE, HAVING, UNIQUE, NOT NULL, AND, OR, >, <, etc
 \end{itemize}
-\emph{Note: be aware of long execution times of views}
+\emph{Note: Be aware of long execution times of views}
 
 \subsubsection{Granting and revoking access to a views}
+\hl{GRANT privilege(s)} or \hl{REVOKE privilege(s)}
+
+\hl{ON Object}
+
+\hl{TO role} or \hl{FROM role}
+
+\begin{itemize}
+    \item \textbf{Privileges:} \hl{SELECT}, \hl{INSERT}, \hl{UPDATE}, \hl{DELETE}, etc
+    \item \textbf{Objects:} table, view, schema, etc
+    \item \textbf{Roles:} a database user or a group of databaes users
+\end{itemize}
