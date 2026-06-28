@@ -56,3 +56,44 @@ SELECT * FROM INFORMATION_SCHEMA.views;
 
 SELECT * FROM information_schema.views
 WHERE table_schema NOT IN ('pg_catalog', 'information_schema');
+
+GRANT UPDATE ON ratings TO PUBLIC;
+
+REVOKE INSERT ON films FROM db_user;
+
+UPDATE films SET kind = 'Dramatic' WHERE kind = 'Drama';
+
+INSERT INTO films (code, title, did, date_prod, kind)
+    VALUES ('T_601', 'Yojimbo', 106, '1961-06-16', 'Drama');
+
+DROP VIEW view_name [ CASCADE | RESTRICT ];
+
+CREATE OR REPLACE VIEW view_name AS new_query
+
+ALTER VIEW [ IF EXISTS ] name ALTER [ COLUMN ] column_name SET DEFAULT expression
+ALTER VIEW [ IF EXISTS ] name ALTER [ COLUMN ] column_name DROP DEFAULT
+ALTER VIEW [ IF EXISTS ] name OWNER TO new_owner
+ALTER VIEW [ IF EXISTS ] name RENAME TO new_name
+ALTER VIEW [ IF EXISTS ] name SET SCHEMA new_schema
+ALTER VIEW [ IF EXISTS ] name SET ( view_option_name [= view_option_value] [, ...])
+ALTER VIEW [ IF EXISTS ] name RESET ( view_option_name [, ...])
+
+CREATE MATERIALIZED VIEW my_mv AS SELECT * FROM existing_table;
+
+REFRESH MATERIALIZED VIEW my_mv; -- use cron jobs in postgres
+
+CREATE ROLE data_analyst;
+
+CREATE ROLE alex WITH PASSWORD 'PasswordForIntern' VALID UNTIL '2020-01-01';
+
+CREATE ROLE admin CREATEDB;
+
+ALTER ROLE admin CREATEROLE;
+
+GRANT UPDATE ON ratings TO data_analyst;
+
+REVOKE UPDATE ON ratings FROM data_analyst;
+
+GRANT data_analyst TO alex;
+
+REVOKE data_analyst FROM alex;

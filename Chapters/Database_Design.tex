@@ -657,3 +657,294 @@ Excludes system views
     \item \textbf{Objects:} table, view, schema, etc
     \item \textbf{Roles:} a database user or a group of databaes users
 \end{itemize}
+
+\subsubsection{Granting and revoking example}
+\inputminted[
+    firstline=60,
+    lastline=62
+]{SQL}{SQL/DatabaseDesign.sql}
+
+\emph{Note: Here PUBLIC encompasses all users of the database.}
+
+\subsubsection{Updating a view}
+\inputminted[
+    firstline=64,
+    lastline=64
+]{SQL}{SQL/DatabaseDesign.sql}
+
+\textbf{Not all views are updatable}
+\begin{itemize}
+    \item View is made up of one table
+    \item Doesn't use a window or aggregate function
+\end{itemize}
+
+\subsubsection{Inserting into a view}
+\inputminted[
+    firstline=66,
+    lastline=67
+]{SQL}{SQL/DatabaseDesign.sql}
+
+\textbf{Not all views are insertable}
+\emph{Takeaway: avoid modifying data through views}
+
+\subsubsection{Dropping a view}
+\inputminted[
+    firstline=69,
+    lastline=69
+]{SQL}{SQL/DatabaseDesign.sql}
+
+\begin{itemize}
+    \item \hl{RESTRICT} (default): returns an error if there are objects that depend on the view
+    \item \hl{CASCADE}: drops view and any object that depends on that view
+\end{itemize}
+
+\subsubsection{Redefining a view}
+\inputminted[
+    firstline=71,
+    lastline=71
+]{SQL}{SQL/DatabaseDesign.sql}
+\begin{itemize}
+    \item If a view with \hl{view\_name} exists, it is replaced
+    \item \hl{new\_query} must generate the same column names, order and data types as the old query
+    \item The column output may be Different
+    \item New columns may be added at the end
+\end{itemize}
+\emph{Note: If these criteria cannot be met, drop the existing view and create a new one}
+
+\subsubsection{Altering a view}
+\inputminted[
+    firstline=73,
+    lastline=79
+]{SQL}{SQL/DatabaseDesign.sql}
+
+\emph{\textbf{Note: All the queries for managing views can be dound at postgresql.org/docs/9.2 at their respective section}}
+
+\subsection{Materialized views}
+\emph{Two types of views}
+\subsubsection{Views}
+\begin{itemize}
+    \item Also known as \textbf{non-materialized views}
+    \item How we've defined view so far
+\end{itemize}
+
+\subsubsection{Materialized views}
+\begin{itemize}
+    \item Physically materialized
+    \item Stores the \textbf{query results}, not the \textbf{query}
+    \item Querying a materialized view means accessing the stored query results
+    \begin{itemize}
+        \item Not running the query like a non-materialized view
+    \end{itemize}
+    \item Refreshed or rematerialized when prompted or scheduled (Using cron jobs in postgres)
+\end{itemize}
+
+\subsubsection{When to use materialized views}
+\begin{itemize}
+    \item Long running queries
+    \item Underlying query results don't change often
+    \item Data warehouses because OLAP is not write-intensive
+    \begin{itemize}
+        \item Save on computational cost of frequent queries
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Implementing materialized views}
+\inputminted[
+    firstline=81,
+    lastline=83
+]{SQL}{SQL/DatabaseDesign.sql}
+
+\subsubsection{Managing dependencies}
+\begin{figure}[H]
+    \centering
+    \caption{Dependency example}
+    \label{fig: Dependency example}
+    \includegraphics[width=1.0\textwidth]{figures/DependencyExample.png}
+\end{figure}
+\begin{itemize}
+    \item Materialized views often depend on other materialized views
+    \item In \ref{fig: Dependency example}, suppose that Y depends on X, but X deoesn't depends on Y and X has time consuming query. If Y refreshes before X refresh is complete, Y now has out-of-date data.
+    \item This creates a \textbf{dependency chain} when refreshing views
+    \item Not the most efficient to refresh all views at the same time.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \caption{Tools for Dependency Management}
+    \label{fig: Tools4DependeencyManagement}
+    \includegraphics[width=1.0\textwidth]{figures/Tools4DependencyManagement.png}
+\end{figure}
+
+\section{Database Management}
+\subsection{Database roles and access control}
+\subsubsection{Database roles}
+\begin{itemize}
+    \item Manage database access permissions
+    \item A database role is an entity that contains information that
+    \begin{itemize}
+        \item Define the role's Privileges
+        \begin{itemize}
+            \item Can you login?
+            \item Can you create databases?
+            \item Can you write to tables?
+        \end{itemize}
+        \item Interact with client authentication system
+        \begin{itemize}
+            \item Password
+        \end{itemize}
+    \end{itemize}
+    \item Roles can be assigned to one or more users
+    \item Roles are global across a database cluster installation
+\end{itemize}
+
+\subsubsection{Create a role}
+\begin{itemize}
+    \item Empty role
+    \inputminted[
+        firstline=85,
+        lastline=85
+    ]{SQL}{SQL/DatabaseDesign.sql}
+    \item Roles with some attributes set
+    \inputminted[
+        firstline=87,
+        lastline=91
+    ]{SQL}{SQL/DatabaseDesign.sql}
+\end{itemize}
+\emph{Note: from https://www.postgresql.org/docs/current/role-attributes.html}
+
+\subsubsection{GRANT and REVOKE privileges from roles}
+\inputminted[
+    firstline=95,
+    lastline=99
+]{SQL}{SQL/DatabaseDesign.sql}
+
+The available privileges in PostgreSQL are:
+\hl{SELECT}, \hl{INSERT}, \hl{UPDATE}, \hl{DELETE}, \hl{TRUNCATE}, \hl{REFERENCES}, \hl{TRIGGER}, \hl{CREATE},
+\hl{CONNECT}, \hl{TEMPORARY}, \hl{EXECUTE}, and \hl{USAGE}.
+\emph{NOTE: from https://www.postgresql.org/docs/current/ddl-priv.html}
+
+\subsubsection{Users and groups (are both roles)}
+\begin{itemize}
+    \item A role is an entity that can function as a user and/or a group
+    \begin{itemize}
+        \item \textbf{Group roles}
+        \inputminted[
+            firstline=85,
+            lastline=85
+        ]{SQL}{SQL/DatabaseDesign.sql}
+        \item \textbf{User roles}, here alex is an intern at a company until 2020-01-01 then
+        \inputminted[
+            firstline=87,
+            lastline=87
+        ]{SQL}{SQL/DatabaseDesign.sql}
+        \inputminted[
+            firstline=97,
+            lastline=99
+        ]{SQL}{SQL/DatabaseDesign.sql}
+    \end{itemize}
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \caption{Roles}
+    \label{fig:Role}
+    \includegraphics[width=1.0\textwidth]{figures/Roles.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Common PostgreSQL Roles}
+    \label{fig:CommonDefaultRoles}
+    \includegraphics[width=1.0\textwidth]{figures/CommonDefaultRoles.png}
+\end{figure}
+
+\subsubsection{Benefit and pitfalls of roles}
+\textbf{Benefits}
+\begin{itemize}
+    \item Roles live on after users are deleted
+    \item Roles can be created before user accounts
+    \item Save DBAa time
+\end{itemize}
+\textbf{Pitfalls}
+\begin{itemize}
+    \item Sometimes a role gives a specific user too much Access
+    \begin{itemize}
+        \item You need to pay attention
+    \end{itemize}
+\end{itemize}
+
+\subsection{Table partitioning}
+\subsubsection{Why partition?}
+Tables grow (100s Gb / Tb)
+\textbf{Problem:} queries/updates becomes slower \\
+\textbf{Because:} e.g., indices don't fit memory \\
+\textbf{Solution:} split table into smaller parts (=\textbf{partitioning})
+
+\subsubsection{Data modeling refresher}
+\begin{enumerate}
+    \item Conceptual data model
+    \item Logical data model \\
+    For partitioning, logical model is the same
+    \item Physical data model \\
+    Partitioning is part of physical data model
+\end{enumerate}
+
+\subsubsection{Vertical partitioning}
+\begin{figure}[H]
+    \centering
+    \caption{Vertical Partitioning}
+    \label{fig:VerticalPartitioning}
+    \includegraphics[width=1.0\textwidth]{figures/VerticalPartitioning.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Vertical Partitioning Example}
+    \label{fig:VerticalPartitioningExample}
+    \includegraphics[width=1.0\textwidth]{figures/VPExample.png}
+\end{figure}
+
+\subsubsection{Horizontal Partitioning}
+\begin{figure}[H]
+    \centering
+    \caption{Horizontal Partitioning}
+    \label{fig:HPExample1}
+    \includegraphics[width=1.0\textwidth]{figures/HPExample1.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Horizontal Partitioning Example}
+    \label{fig:HPExample2}
+    \includegraphics[width=1.0\textwidth]{figures/HPExample2.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Horizontal Partitioning Example}
+    \label{fig:HPExample3}
+    \includegraphics[width=1.0\textwidth]{figures/HPExample3.png}
+\end{figure}
+
+\subsubsection{Pros/cons of horizontal partitioning}
+\textbf{Pros}
+\begin{itemize}
+    \item Indices of \textbf{heavily-used partitions} fit in memory
+    \item Move to \textbf{specific medium}: slower vs faster
+    \item Used for both OLAP and OLTP
+\end{itemize}
+
+\textbf{Cons}
+\begin{itemize}
+    \item Partitioning \textbf{existing table} can be a hassle
+    \item Some \textbf{constraints} can not be set
+\end{itemize}
+
+When horizontal partitioning is applied to spread table over several machines, it's called sharding.
+\begin{figure}[H]
+    \centering
+    \caption{Sharding}
+    \label{fig:Sharding}
+    \includegraphics[width=1.0\textwidth]{figures/Sharding.png}
+\end{figure}
+
+\section{Data integration}
+\subsection{Database roles and access control}
