@@ -938,7 +938,7 @@ Tables grow (100s Gb / Tb)
     \item Some \textbf{constraints} can not be set
 \end{itemize}
 
-When horizontal partitioning is applied to spread table over several machines, it's called sharding.
+When horizontal partitioning is applied to spread table over several machines, it's called sharding. It allows massively parallel processing
 \begin{figure}[H]
     \centering
     \caption{Sharding}
@@ -946,5 +946,163 @@ When horizontal partitioning is applied to spread table over several machines, i
     \includegraphics[width=1.0\textwidth]{figures/Sharding.png}
 \end{figure}
 
-\section{Data integration}
-\subsection{Database roles and access control}
+\subsection{Data integration}
+Data Integration combines data from different sources, formats, technologies to provide users with a translated and unified view of that data.
+
+\subsubsection{Business case examples}
+\begin{itemize}
+    \item 360-degree customer view
+    \item Acquisition
+    \item Legacy systems
+\end{itemize}
+
+\subsubsection{Unified data model and format}
+It could be used to create dashboards, like graph of daily sales, or data products, such as a recommendation engine.
+It can be in format of \emph{Redshift}, a data warehouse service offered by AWS.
+\begin{figure}[H]
+    \centering
+    \caption{Data Integartion Example}
+    \includegraphics[width=1.0\textwidth]{figures/DataIntegrationExample.png}
+\end{figure}
+
+\subsubsection{Data sources and format}
+Necessary data are stored/held in these data sources in formats like PostgreSQL, MongoDB or a CSV.
+
+Example: DataCamp is launching a skill assessment module. Marketing wants to know which customers to target.
+They need information from sales, stored in PostgreSQL, to see which customers can afford the new product.
+They also need information from the product department, stored in MongoDB to identify potential early adopters.
+
+\subsubsection{Update cadence - sales}
+Updating sales data daily would probably be sufficient for sales data.
+\begin{figure}[H]
+    \centering
+    \caption{Update cadence for sales}
+    \includegraphics[width=1.0\textwidth]{figures/SalesUpdateCadence.png}
+\end{figure}
+
+\subsubsection{Update cadence -air traffic}
+For a scenario like air traffic, we want real time updates
+\begin{figure}[H]
+    \centering
+    \caption{Update cadence for air traffic}
+    \includegraphics[width=1.0\textwidth]{figures/AirTrafficUpdateCadence.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Update Cadence}
+    \includegraphics[width=1.0\textwidth]{figures/UpdateCadence.png}
+\end{figure}
+
+\subsubsection{Transformations and tools}
+Use data integration tools, which provides ETL, example : Apache Airflow or Scriptella
+\begin{figure}[H]
+    \centering
+    \caption{Transformation Tools}
+    \includegraphics[width=1.0\textwidth]{figures/TransformationToolsETL.png}
+\end{figure}
+
+\subsubsection{Choosing a Data Integration tool}
+\begin{itemize}
+    \item Flexible : to support different data fomats
+    \item Reliable : to not 
+    \item Scalable : to large data sets
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \caption{Automated Testing and Proactive Alerts.}
+    \includegraphics[width=1.0\textwidth]{figures/TestingAndAlerts.png}
+\end{figure}
+
+\subsubsection{Security}
+Data access, if originally restricted should remain restricted in unified data model. For example, business analysts
+using unified data model should not have access to the credit card numbers. Data should be anonymized during ETL
+so that analysts can only access the first four numbers, to identify the type of card being used.
+\begin{figure}[H]
+    \centering
+    \caption{Anonymization of Credit Cards.}
+    \includegraphics[width=1.0\textwidth]{figures/CreditCardAnon.png}
+\end{figure}
+
+\subsubsection{Data governance - lineage}
+For data governance purpose, lineage should be considered: for effective auditing, the origin of data and 
+where it is used at all times should be known.
+\begin{figure}[H]
+    \centering
+    \caption{Data Governance - Lineage}
+    \includegraphics[width=1.0\textwidth]{figures/LineageDataGovernance.png}
+\end{figure}
+
+\subsection{Picking a Database Management System (DBMS)}
+\begin{itemize}
+    \item \textbf{DBMS}: Database Management System
+    \item Create and maintain databases
+    \begin{itemize}
+        \item Data
+        \item Database schema
+        \item Database engine
+    \end{itemize}
+    \item Interface between database and end users
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \caption{DBMS}
+    \includegraphics[width=0.45\textwidth]{figures/DBMS.png}
+\end{figure}
+
+\subsubsection{DBMS types}
+\begin{itemize}
+    \item Choice of database depends on database types
+    \item Two types
+    \begin{itemize}
+        \item \textbf{SQL DBMS}
+        \item \textbf{NoSQL DBMS}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{SQL DBMS}
+\begin{figure}[H]
+    \centering
+    \caption{SQL DBMS}
+    \includegraphics[width=1.0\textwidth]{figures/SQLDBMS.png}
+\end{figure}
+
+\subsubsection{NoSQL DBMS}
+\begin{itemize}
+    \item Less Structured
+    \item Document-centered rather than table centered
+    \item Data doesn't have to fit into well-defined rows and columns
+    \item Best option when:
+    \begin{itemize}
+        \item Rapid growth
+        \item No clear schema definition
+        \item Large quantities of data
+    \end{itemize}
+    \item Types(mainly 4): key-value store, document store, columnar database, graph database
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \caption{Key Value Database}
+    \includegraphics[width=1.0\textwidth]{figures/KeyValueDB.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Columnar Database}
+    \includegraphics[width=1.0\textwidth]{figures/ColumnarDB.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Document Database}
+    \includegraphics[width=1.0\textwidth]{figures/DocumentDB.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Graph Database}
+    \includegraphics[width=1.0\textwidth]{figures/GraphDB.png}
+\end{figure}
+
