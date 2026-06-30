@@ -174,9 +174,249 @@ A hypothetical publicly traded company that sells home office furniture with
 
 \section{Warehouse Architectures and Properties}
 \subsection{What are the different layers of a data warehouse?}
+\begin{figure}[H]
+    \centering
+    \caption{Layers of Data Warehouse}
+    \includegraphics[width=1.0\textwidth]{figures/DWLayers.png}
+\end{figure}
+
+\subsubsection{Data source layer}
+\begin{figure}[H]
+    \centering
+    \caption{Data Source}
+    \includegraphics[width=0.4\textwidth]{figures/DataSource.png}
+\end{figure}
+\begin{itemize}
+    \item All data sources for data warehouse
+    \item Examples of data sources:
+    \begin{itemize}
+        \item Transactional database
+        \item Log Files
+        \item Spreadsheets
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Data staging layer}
+\begin{figure}[H]
+    \centering
+    \caption{Data Staging}
+    \includegraphics[width=0.4\textwidth]{figures/DataStaging.png}
+\end{figure}
+\begin{itemize}
+    \item Layer extracts, transform, and clean data through ETL process
+    \item Contains ETL process and storage tables
+    \item \textbf{ETL process within data staging layer}
+    \begin{itemize}
+        \item Extracted
+        \item Business rules applied and cleaned
+        \item Staging database often used
+        \item Must be able to extract valid data
+        \item Batch / full loading
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Data storage layer}
+\begin{figure}[H]
+    \centering
+    \caption{Data Storage}
+    \includegraphics[width=0.4\textwidth]{figures/DataStorage.png}
+\end{figure}
+\begin{itemize}
+    \item Data is stored in warehouse and data marts
+    \begin{itemize}
+        \item Data warehouse -> Data mart
+        \item Data mart -> Data warehouse
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Data presentation layer}
+\begin{figure}[H]
+    \centering
+    \caption{Data Presentation}
+    \includegraphics[width=0.4\textwidth]{figures/DataPresentation.png}
+\end{figure}
+\begin{itemize}
+    \item Users interact with stored data
+    \item Users:
+    \begin{itemize}
+        \item Uses BI(Business intelligence) tools
+        \item Use data mining tools
+        \item Create direct queries
+    \end{itemize}
+\end{itemize}
 
 \subsection{The presentation layers}
+\subsubsection{Presentation layer tools}
+\begin{itemize}
+    \item Users interact with the presentation layer
+    \begin{itemize}
+        \item Area of constant Development
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Presentation Layer Groups(3)}
+\begin{itemize}
+    \item Automated reporting/dashboarding tools
+    \item BI/data analytics
+    \item Direct queries
+\end{itemize}
+
+\subsubsection{Automated reporting/dashboarding}
+\begin{figure}[H]
+    \centering
+    \caption{Automated reporting/dashboarding Tools}
+    \includegraphics[width=0.8\textwidth]{figures/AutomatedRD.png}
+\end{figure}
+\begin{itemize}
+    \item Goal:
+    \begin{itemize}
+        \item Create reports needed for decision making
+        \item Create dashboards using historical data
+    \end{itemize}
+    \item Users:
+    \begin{itemize}
+        \item Analysts
+        \item Citizen Data Scientist
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{BI/Data analytics}
+\begin{figure}[H]
+    \centering
+    \caption{BI/Data Analytics Tools}
+    \includegraphics[width=0.8\textwidth]{figures/BIDA.png}
+\end{figure}
+\begin{itemize}
+    \item Goal:
+    \begin{itemize}
+        \item Tools for exploration
+        \item Looking for patterns
+    \end{itemize}
+    \item Users:
+    \begin{itemize}
+        \item Analysts
+        \item Data Scientist
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Direct Queries}
+\begin{figure}[H]
+    \centering
+    \caption{Direct Queries Tools}
+    \includegraphics[width=0.8\textwidth]{figures/DirectQueries.png}
+\end{figure}
+\begin{itemize}
+    \item Goal:
+    \begin{itemize}
+        \item Sophisticated tools for exploration
+    \end{itemize}
+    \item Users:
+    \begin{itemize}
+        \item Analysts
+        \item Data Scientist
+        \item Data Engineer
+    \end{itemize}
+\end{itemize}
 
 \subsection{Data warehouse Architectures}
+\subsubsection{Inmon by Bill Inmon - top-down approach}
+\begin{figure}[H]
+    \centering
+    \caption{Top down approach}
+    \includegraphics[width=1.0\textwidth]{figures/Inmon.png}
+\end{figure}
+Must decide:
+\begin{itemize}
+    \item On all data definitions, cleaning, and business rules
+    \item Before any data enters warehouse
+\end{itemize}
+
+\subsubsection{Pros and cons of top-down}
+\textbf{Advantages}
+\begin{itemize}
+    \item Single source of truth for organization
+    \item Normalization = less storage
+    \item Easy to change data marts to support reporting changes
+\end{itemize}
+
+\textbf{Disadvantages}
+\begin{itemize}
+    \item More joins = slower response time
+    \item Lengthy upfront Work causing Higher startup cost
+\end{itemize}
+
+\subsubsection{Kimball by Ralph Kimball - bottom-up approach}
+\begin{figure}[H]
+    \centering
+    \caption{Bottom Up approach}
+    \includegraphics[width=1.0\textwidth]{figures/Kimball.png}
+\end{figure}
+\begin{itemize}
+    \item Denormalizes data
+    \item Focus on departmental data mart
+    \item Data moves directly from ETL to data marts
+\end{itemize}
+
+\subsubsection{Pros and cons of bottom-up}
+\textbf{Advantages:}
+\begin{itemize}
+    \item Upfront development speed causing Lower startup cost
+    \item Denormalized = user friendly
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item Increased ETL processing time
+    \item Greater possibility of duplicate data
+    \item Ongoing development needed
+\end{itemize}
 
 \subsection{OLAP and OLTP systems}
+\subsubsection{OLAP systems}
+\begin{itemize}
+    \item OLAP(online analytical processsing)
+    \item Designed to support analysis of large amounts of data
+    \item Example dimensional organization
+    \begin{itemize}
+        \item country, state, city
+        \item years, months, days
+    \end{itemize}
+    \item OLAP reorganizes data into multidimensional format
+\end{itemize}
+
+\subsubsection{OLAP cube}
+\begin{figure}[H]
+    \centering
+    \caption{OLAP cube}
+    \includegraphics[width=0.8\textwidth]{figures/OLAP cube.png}
+\end{figure}
+\begin{itemize}
+    \item OLAP cube key to OLAP system
+    \item Faster processing vs. traditional relational databases
+    \item Hypercubes have more than three dimensions
+\end{itemize}
+
+\subsubsection{OLTP}
+\begin{itemize}
+    \item OLTP(online transaction processing)
+    \item Designed for processing simple database queries
+    \item Used in source systems to data warehouse
+\end{itemize}
+
+\subsubsection{Example for a credit card company}
+\textbf{OLTP}:
+\begin{itemize}
+    \item System tracks customer's purchase
+    \item Processes large amounts of simple database updates to account balances
+\end{itemize}
+
+\textbf{OLAP}:
+\begin{itemize}
+    \item Designed for analyzing purchase data
+    \item Data organized by multiple dimensions
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/ATSummary.png}
+\end{figure}
