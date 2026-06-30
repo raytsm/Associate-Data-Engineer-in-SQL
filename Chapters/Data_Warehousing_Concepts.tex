@@ -29,8 +29,148 @@ A hypothetical publicly traded company that sells home office furniture with
 \end{itemize}
 
 \subsection{What's the difference between data warehouses and data lakes?}
+\subsubsection{Database}
+\begin{figure}[H]
+    \centering
+    \caption{Databases}
+    \includegraphics[width=0.5\textwidth]{figures/Databases.png}
+\end{figure}
+\begin{itemize}
+    \item Structured data in rows and columns
+    \item Transactional databases store transactions
+\end{itemize}
+
+\subsubsection{Data warehouse}
+\begin{figure}[H]
+    \centering
+    \caption{Data Warehouse}
+    \includegraphics[width=0.5\textwidth]{figures/DataWarehouse.png}
+\end{figure}
+\begin{itemize}
+    \item Gather data, integrate, and make available for analysis
+    \item Many input data sources
+    \item Stores structured data
+    \item Complex to change
+    \begin{itemize}
+        \item Upstream and downstream effects must be considered
+    \end{itemize}
+    \item Typically >100 GB in size
+\end{itemize}
+
+\subsubsection{Why the data warehouse?}
+\begin{itemize}
+    \item How quickly the query will run on a large amount of data
+    \item Avoid slowing down transactional database
+\end{itemize}
+
+\subsubsection{Data marts}
+\begin{figure}[H]
+    \centering
+    \caption{Data marts}
+    \includegraphics[width=0.5\textwidth]{figures/DataMart.png}
+\end{figure}
+\begin{itemize}
+    \item A relational databases for analysis
+    \item Data is focused on one subject area
+    \item Few input data sources
+    \item Typically less than 100 GB in size
+\end{itemize}
+
+\subsubsection{Data lake}
+\begin{figure}[H]
+    \centering
+    \caption{Data Lake}
+    \includegraphics[width=0.5\textwidth]{figures/DataLake.png}
+\end{figure}
+\begin{itemize}
+    \item Entire organization store of data
+    \begin{itemize}
+        \item Contains data from many departments
+        \item Many data input sources
+        \item Typically more than 100 GB in size
+    \end{itemize}
+    \item Stores structured and Unstructured data
+    \begin{itemize}
+        \item Examples: video, audio, and documents
+    \end{itemize}
+    \item Less complex to make Changes
+    \begin{itemize}
+        \item Fewer upstream and downstream effects to consider
+    \end{itemize}
+    \item Purpose to store data may not be known thus Less organized
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/SummaryWML.png}
+\end{figure}
 
 \subsection{Data warehouses support organizational analysis}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/HighLevelLifeCycle.png}
+\end{figure}
+\begin{enumerate}
+    \item \textbf{Planning - Business Requirements}
+    \begin{itemize}
+        \item Understanding the organizational needs
+        \item Personas:
+        \begin{itemize}
+            \item \textbf{Analyst \& Data Scientist} - collect requirements
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Planning - Data Modeling}
+    \begin{itemize}
+        \item Planning and organizing on integrating data
+        \item Personas:
+        \begin{itemize}
+            \item \textbf{Data Engineer \& Database Admins} - design data pipeline
+            \item \textbf{Analyst \& Data Scientist} - data business knowledge
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Implementation - ETL Design \& Development}
+    \begin{itemize}
+        \item Implement data pipelines and ETL process
+        \item Personas:
+        \begin{itemize}
+            \item \textbf{Data Engineer \& Database Admins} - Implement data pipeline
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Implementation - BI Application Development}
+    \begin{itemize}
+        \item Setup business intelligence (BI) tools
+        \item Personas:
+        \begin{itemize}
+            \item \textbf{Analyst \& Data Scientist} - consult on BI tool setup like tableau, Power BI or Google's Looker
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \caption{BI tools}
+            \includegraphics[width=0.5\textwidth]{figures/BITools.png}
+        \end{figure}
+    \end{itemize}
+    \item \textbf{Support / Maintenance - Maintenance}
+    \begin{itemize}
+        \item Make any needed modifications
+        \item Personas:
+        \begin{itemize}
+            \item \textbf{Data Engineer} - modify as needed
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Support / Maintenance - Test \& Deploy}
+    \begin{itemize}
+        \item Testing
+        \item Personas:
+        \begin{itemize}
+            \item \textbf{Analyst \& Data Scientist} - consult on BI tool setup
+            \item \textbf{Data Engineers} - deploy the data warehouse
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/PersonaMatrix.png}
+\end{figure}
 
 \section{Warehouse Architectures and Properties}
 \subsection{What are the different layers of a data warehouse?}
