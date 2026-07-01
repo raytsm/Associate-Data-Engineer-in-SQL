@@ -601,7 +601,7 @@ Here, the table consist of new row for the updated value including the date and 
 \begin{itemize}
     \item Snapshot the whole dimension table
     \item Use historical snapshots for historical reports
-    \item Similar to type I but will hisotrical recovery via snapshots.
+    \item Similar to Type I but with historical recovery via snapshots.
 \end{itemize}
 
 \subsection{Row vs. column data source}
@@ -655,9 +655,231 @@ Here, the table consist of new row for the updated value including the date and 
 
 \section{Implementation and Data Prep}
 \subsection{ETL and ELT}
+\subsubsection{Understanding ETL and ELT names}
+ETL : Extract, Transform and Load \\
+ELT : Extract, Load and Transform
+
+\subsubsection{Understanding ETL - Pros and Cons}
+\begin{itemize}
+    \item Data transformed during the move
+    \item Uses separate system to process data
+\end{itemize}
+
+\textbf{Pros:}
+\begin{itemize}
+    \item Lower data storage cost
+    \item PII security compliance
+\end{itemize}
+
+\textbf{Cons:}
+\begin{itemize}
+    \item Transformation errors/changes require new data pulls
+    \item Costs of separate system to process data
+\end{itemize}
+
+\subsubsection{Understanding ELT - Pros and Cons}
+\begin{itemize}
+    \item Data is loaded, then transformed
+    \item Uses the warehouse to transform the data
+\end{itemize}
+
+\textbf{Pros:}
+\begin{itemize}
+    \item No separate system to process data
+    \item Transformations can be rerun without impacting source systems
+    \item Works well for near real-time requirements
+\end{itemize}
+
+\textbf{Cons:}
+\begin{itemize}
+    \item Increased storage needs from raw data
+    \item Compliance with PII security standards
+\end{itemize}
 
 \subsection{Data cleaning}
+\begin{enumerate}
+    \item Data format revision
+    \item Address parsing
+    \item Data validation
+    \item De-duplication
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \caption{Data Format Cleaning}
+    \includegraphics[width=1.0\textwidth]{figures/DataFormatCleaning.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Address Parsing}
+    \includegraphics[width=1.0\textwidth]{figures/AddressParsing.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Data Validation}
+    \includegraphics[width=1.0\textwidth]{figures/DataValidation.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{De-duplicating}
+    \includegraphics[width=1.0\textwidth]{figures/DuplicateRowElimination.png}
+\end{figure}
+
+\subsubsection{Data Governance}
+Data governance develops definition around the data and corrects the data when it deviates from its definition.
+A solid organizational data governance program will require less data cleaning within the ETL or ELT process.
+\begin{figure}[H]
+    \centering
+    \caption{Data Governance}
+    \includegraphics[width=1.0\textwidth]{figures/DataGovernance.png}
+\end{figure}
 
 \subsection{On premise and cloud data warehouses}
+\subsubsection{On premise}
+\begin{itemize}
+    \item Purchase and install software and hardware
+    \item On the grounds of the organization
+    \item For Critical Workloads and Regulatory Compliances
+\end{itemize}
+\subsubsection{On premise - pros and cons}
+\textbf{Pros:}
+\begin{itemize}
+    \item Complete control
+    \item Implement custom data Governance
+    \item Local network speeds 
+    \item Can optimize for workloads
+\end{itemize}
+\textbf{Cons:}
+\begin{itemize}
+    \item Upfront hardware and software costs
+    \item Personnel/staff must maintain system
+    \item Must keep up with patches and security
+\end{itemize}
+
+\subsubsection{In the cloud}
+\begin{itemize}
+    \item Rapid growth
+    \item Forecasted continued growth
+\end{itemize}
+\begin{figure}
+    \centering
+    \caption{Cloud}
+    \includegraphics[width=0.5\textwidth]{figures/PublicCloud.png}
+\end{figure}
+
+\subsubsection{In the cloud - pros and cons}
+\textbf{Pros:}
+\begin{itemize}
+    \item No maintaining equipment and infrastructure
+    \item Frees up Personnel
+    \item Can scale storage and compute resources
+    \item No upfront investment in equipment/software
+\end{itemize}
+\textbf{Cons:}
+\begin{itemize}
+    \item Less control
+    \item Cannot optimize warehouse workloads
+    \item Possible unanticipated costs
+\end{itemize}
+
+\subsubsection{Hybrid approach}
+\begin{itemize}
+    \item On premise and in the cloud data warehouse
+    \item Reasons for hybrid approach:
+    \begin{itemize}
+        \item Backup
+        \item Disaster recovery
+    \end{itemize}
+\end{itemize}
 
 \subsection{Data warehouse design example}
+\subsubsection{Let's set the stage}
+\begin{itemize}
+    \item A new startup company
+    \item Photo sharing app
+\end{itemize}
+
+\subsubsection{Top-down, or bottoms up approach?}
+\textbf{Considerations:}
+\begin{itemize}
+    \item Vital to show business impact quickly
+    \item Top-down approach has a longer startup process
+\end{itemize}
+\textbf{Decision:}
+\begin{itemize}
+    \item Bottom-up approach
+    \item Sales data mart must be the priority
+\end{itemize}
+
+\subsubsection{Kimball - select the organizational process (step 1)}
+\textbf{Considerations}
+\begin{itemize}
+    \item What type of customers purchase large volumes of photos?
+\end{itemize}
+\textbf{Decision:}
+\begin{itemize}
+    \item Develop customer purchases
+\end{itemize}
+
+\subsubsection{Kimball - Declare the grain (Step 2)}
+\textbf{Considerations:}
+\begin{itemize}
+    \item Data should be flexible to answer many questions
+    \item Selecting the lowest grain possible
+\end{itemize}
+\textbf{Decision}
+\begin{itemize}
+    \item Tracking customer/photo purchases
+\end{itemize}
+
+\subsubsection{Kimball - Identify the dimensions (Step 3)}
+\textbf{Considerations:}
+\begin{itemize}
+    \item How do users describe the data that results from the business process?
+    \item Customer prioritization
+\end{itemize}
+\textbf{Decision:}
+\begin{itemize}
+    \item Customer location (country and state)
+    \item Date customer joined
+    \item Default payment method
+\end{itemize}
+
+\subsubsection{Kimball -Identify the facts (Step 4)}
+\textbf{Considerations:}
+\begin{itemize}
+    \item What are we answering?
+\end{itemize}
+\textbf{Decision:}
+\begin{itemize}
+    \item Time spent viewing photo before purchase
+    \item Photo cost and tax
+    \item Date of purchase
+\end{itemize}
+
+After these four step we now have star schema data model.
+
+\subsubsection{On-premise or cloud Implementation}
+\textbf{Considerations:}
+\begin{itemize}
+    \item We do not want upfront costs for ahrdware/software infrastructure
+    \item Small team - focus on high value activities
+\end{itemize}
+\textbf{Decision:}
+\begin{itemize}
+    \item Cloud implementation
+\end{itemize}
+
+\subsubsection{ETL or ELT implementations}
+\textbf{Considerations:}
+\begin{itemize}
+    \item Keep all data
+    \item Cloud implementation allows us to scale compute as needed
+\end{itemize}
+\textbf{Decision}
+\begin{itemize}
+    \item ELT implementation
+\end{itemize}
