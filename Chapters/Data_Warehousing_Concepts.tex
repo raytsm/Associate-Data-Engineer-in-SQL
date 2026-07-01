@@ -420,3 +420,244 @@ Must decide:
     \centering
     \includegraphics[width=1.0\textwidth]{figures/ATSummary.png}
 \end{figure}
+
+\section{Data Warehouse Data Modeling}
+\subsection{Data warehouse data modeling}
+\begin{figure}[H]
+    \caption{Data Models}
+    \includegraphics[width=1.0\textwidth]{figures/DataModels1.png}
+\end{figure}
+
+\subsubsection{It's Bravo again!}
+\begin{itemize}
+    \item Hypothetical publicly traded company that sells home office furniture
+\end{itemize}
+
+\subsubsection{Fact table}
+\begin{itemize}
+    \item Measurements, metrics, or facts about an organization
+    \item Links to dimension tables for more details
+\end{itemize}
+\begin{figure}[H]
+    \caption{Fact Table}
+    \includegraphics[width=0.5\textwidth]{figures/FactTable.png}
+\end{figure}
+
+\subsubsection{Dimension table}
+\begin{itemize}
+    \item Dimensions/attributes about a process
+    \item Holds reference data
+    \item Dimension tables add more detail to fact table
+\end{itemize}
+\begin{figure}[H]
+    \caption{Dimension Table}
+    \includegraphics[width=0.5\textwidth]{figures/DimensionTable.png}
+\end{figure}
+
+\subsubsection{Star Schema}
+\begin{itemize}
+    \item A central fact table, with one or more dimensional tables
+    \item Easy for business users
+\end{itemize}
+\begin{figure}[H]
+    \caption{Star Schema}
+    \includegraphics[width=1.0\textwidth]{figures/StarSchema.png}
+\end{figure}
+
+\subsubsection{Snowflake Schema}
+\begin{itemize}
+    \item Dimensional table connected through another dimensional table
+\end{itemize}
+\begin{figure}[H]
+    \caption{Snowflake Schema}
+    \includegraphics[width=1.0\textwidth]{figures/SnowflakeSchema1.png}
+\end{figure}
+
+\subsection{Kimball's four step process}
+\begin{enumerate}
+    \item \textbf{Step 1 - Select the organizational process}
+    \begin{itemize}
+        \item Ask questions about a process
+        \item Kimball bottom-up approach starts with a business process \\
+        \textbf{Examples of organizationl process}
+        \begin{itemize}
+            \item Invoice and billing
+            \item Product quality monitoring
+            \item Marketing
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Step 2 - Declare the grain}
+    \begin{itemize}
+        \item Grain = level to store fact table
+        \item A level of data that cannot be split further \\
+        \textbf{Examples of business process}
+        \begin{itemize}
+            \item Music service can have Song grain
+            \item Shipping service can have Line item grain
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Step 3 - Identify the dimensions}
+    \begin{itemize}
+        \item Choose dimensions that apply to each row 
+        \item How to describe the data? 
+        \item Business users and analysts = valuable feedback \\
+        \textbf{Examples of common dimensions:}
+        \begin{itemize}
+            \item \textbf{Time:} year, quarter, and month
+            \item \textbf{Location:} address, state, and country
+            \item \textbf{Users:} names and email address
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Step 4 - Identify the facts}
+    \begin{itemize}
+        \item Numerical facts for each fact table row
+        \item What are we answering?
+        \item Metrics should be true at selected grain \\
+        \textbf{Examples of facts:}
+        \begin{itemize}
+            \item Music service: total number of plays, sales revenue of a song
+            \item Ride-sharing: travel distance, time needed
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Slowly changing dimensions}
+Kimball's approach to modeling slowly changing dimensions.
+\subsubsection{The challenge}
+Initially we had electric-veh. in category column but now we want it to be electric-crossover. There are 3 ways of doing 
+this by kimball's approach. Type I, Type II and Type III. It focus on the dimension and not the fact table.
+
+\textbf{Original table} \\
+\begin{tabular}{lll}
+    \textbf{ProductID} & \textbf{Description} & \textbf{Category} \\
+    12345 & Tesla-ModelY & electric-veh.
+\end{tabular}
+
+Update Category:
+\begin{itemize}
+    \item \textbf{Current:} electric-veh.
+    \item \textbf{New:} electric-crossover
+\end{itemize}
+
+\subsubsection{Type I:}
+\begin{itemize}
+    \item Update value in table
+    \item Will lose any history
+\end{itemize}
+
+\textbf{Original table} \\
+\begin{tabular}{lll}
+    \textbf{ProductID} & \textbf{Description} & \textbf{Category} \\
+    12345 & Tesla-ModelY & \st{electric-veh.}
+\end{tabular}
+
+\textbf{New table} \\
+\begin{tabular}{lll}
+    \textbf{ProductID} & \textbf{Description} & \textbf{Category} \\
+    12345 & Tesla-ModelY & electric-crossover
+\end{tabular}
+
+\subsubsection{Type II:}
+\begin{itemize}
+    \item Add a row with the updated value
+    \item The history is retained
+\end{itemize}
+
+\textbf{Original table} \\
+\begin{tabular}{lll}
+    \textbf{ProductID} & \textbf{Description} & \textbf{Category} \\
+    12345 & Tesla-ModelY & electric-veh.
+\end{tabular}
+
+\textbf{New table} \\
+\begin{tabular}{lllll}
+    \textbf{ProductID} & \textbf{Description} & \textbf{Category} & \textbf{StartDate} & \textbf{EndDate} \\
+    12345 & Tesla-ModelY & electric-veh. & 1970-01-01 & 2022-03-10 \\
+    20053 & Tesla-ModelY & electric-crossover & 2022-03-11 & 2050-12-31 
+\end{tabular}
+
+Here, the table consist of new row for the updated value including the date and new ID.
+
+\subsubsection{Type III:}
+\begin{itemize}
+    \item Add column to dimension table to track changes.
+    \item Can view past and current data together
+    \item Can require reporting changes and limited tracking
+\end{itemize}
+
+\textbf{Original table} \\
+\begin{tabular}{lll}
+    \textbf{ProductID} & \textbf{Description} & \textbf{Category} \\
+    12345 & Tesla-ModelY & electric-veh.
+\end{tabular}
+
+\textbf{New table} \\
+\begin{tabular}{llll}
+    \textbf{ProductID} & \textbf{Description} & \textbf{Category} & \textbf{PastCategory}\\
+    12345 & Tesla-ModelY & electric-crossover & electric-veh.
+\end{tabular}
+
+\subsubsection{Modern approach}
+\begin{itemize}
+    \item Snapshot the whole dimension table
+    \item Use historical snapshots for historical reports
+    \item Similar to type I but will hisotrical recovery via snapshots.
+\end{itemize}
+
+\subsection{Row vs. column data source}
+\subsubsection{Why is it important?}
+\begin{itemize}
+    \item Optimizing queries for speed
+    \item Column store format for data warehouse tables is best for analytic workloads
+\end{itemize}
+
+\subsubsection{Basics of computer storage}
+\begin{itemize}
+    \item Computers store data in blocks.
+    \item Reads the required blocks when retrieving data.
+    \item Reading fewer blocks increases the overall speed of the process.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \caption{Data stored as Block in computer storage}
+    \includegraphics[width=0.5\textwidth]{figures/DataBlocks.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/HTExample.png}
+\end{figure}
+
+\subsubsection{Row store example}
+\begin{itemize}
+    \item Each row is stored in single block.
+    \item But questions like what is the average hospitalization percentage across all age group for the 2019 season, 
+    the system will have to read each block containing data for 2019 which in this example is 3 blocks to be read.
+    \item Ideal for transactional workloads
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/RSExample.png}
+\end{figure}
+
+\subsubsection{Column store example}
+\begin{itemize}
+    \item It stores data for column in single block
+    \item for the average hospitalization percentage for across all age group it only need to read 
+    single block which is faster for transactional workloads but it's tradeoff is that adding data will take longer.
+    \item It also has added benefits of better data compression because all of the data in a block is the same type.
+    \item Ideal for analytical workloads.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/CSExample.png}
+\end{figure}
+
+\section{Implementation and Data Prep}
+\subsection{ETL and ELT}
+
+\subsection{Data cleaning}
+
+\subsection{On premise and cloud data warehouses}
+
+\subsection{Data warehouse design example}
